@@ -1,0 +1,6 @@
+export CALENDLO_DATABASE_NAME="calendlo"
+export CALENDLO_DATABASE_USER="calendlo"
+export CALENDLO_DATABASE_PASSWORD="calendlo"
+export CALENDLO_DATABASE_HOST="localhost"
+export CALENDLO_DATABASE_PORT="5432"
+export CALENDLO_SECRET_KEY="your_secret_key_goes_here"
