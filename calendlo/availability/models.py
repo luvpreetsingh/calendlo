@@ -13,3 +13,12 @@ class AvailabilitySlot(CalendloBaseModel):
 
     class __meta__:
         db_table = "calendlo_availability_slot"
+
+    @property
+    def is_booked(self):
+        from django.core.exceptions import ObjectDoesNotExist
+        try:
+            self.appointment
+            return True
+        except ObjectDoesNotExist:
+            return False

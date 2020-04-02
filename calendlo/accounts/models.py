@@ -7,6 +7,9 @@ from libs.models import TimeStampedModel
 from .constants import ACCOUNT_ROLES
 from .managers import CalendloUserManager
 
+# Other imports
+from rest_framework.authtoken.models import Token
+
 # Here goes the models.
 
 
@@ -26,3 +29,11 @@ class CalendloUser(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
 
     class __meta__:
         db_table = "calendlo_user"
+
+    @property
+    def access_token(self):
+        token = Token.objects.get_or_create(user=self)
+        return token[0].key
+
+    def __str__(self):
+        return "{}".format(self.identifier)

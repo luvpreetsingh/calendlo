@@ -45,7 +45,12 @@ PROJECT_APPS = [
     'appointments',
 ]
 
-INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS
+OTHER_APPS = [
+    'rest_framework',
+    'rest_framework.authtoken',
+]
+
+INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + OTHER_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
