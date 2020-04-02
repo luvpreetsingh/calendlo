@@ -17,7 +17,7 @@ class CalendloUser(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
     """
     """
     identifier = models.CharField(max_length=32, unique=True, help_text="Your unique identifier on Calendlo")
-    email = models.EmailField(max_length=128, unique=True, null=True)
+    email = models.EmailField(max_length=128, unique=True)
     role = models.CharField(choices=ACCOUNT_ROLES, max_length=4, default='OTH')
     first_name = models.CharField(max_length=32)
     last_name = models.CharField(max_length=32)
