@@ -19,13 +19,16 @@ class CalendloUser(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
     identifier = models.CharField(max_length=32, unique=True, help_text="Your unique identifier on Calendlo")
     email = models.EmailField(max_length=128, unique=True)
     role = models.CharField(choices=ACCOUNT_ROLES, max_length=4, default='OTH')
-    first_name = models.CharField(max_length=32)
-    last_name = models.CharField(max_length=32)
+    first_name = models.CharField(max_length=32, null=True)
+    last_name = models.CharField(max_length=32, null=True)
+
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
 
     objects = CalendloUserManager()
 
     USERNAME_FIELD = 'identifier'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['email']
 
     class __meta__:
         db_table = "calendlo_user"
