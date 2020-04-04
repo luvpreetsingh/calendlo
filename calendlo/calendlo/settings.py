@@ -7,6 +7,8 @@ DATABASES = {
         'USER': os.getenv("CALENDLO_DATABASE_USER", "USER"),
         'PASSWORD': os.getenv("CALENDLO_DATABASE_PASSWORD", "PASSWORD"),
         'HOST': os.getenv("CALENDLO_DATABASE_HOST", "HOST"),
-        'PORT': os.getenv("CALENDLO_DATABASE_PORT", "PORT"),
+        'PORT': int(os.getenv("CALENDLO_DATABASE_PORT", "PORT")),
     }
 }
+
+NO_OF_WEEKS_TO_SCHEDULE = int(os.getenv("CALENDLO_WEEKS_TO_SCHEDULE", 4))

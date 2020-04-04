@@ -22,3 +22,15 @@ class AvailabilitySlot(CalendloBaseModel):
             return True
         except ObjectDoesNotExist:
             return False
+
+    def __str__(self):
+        return "{} free on {} from {} to {}".format(
+            self.user,
+            self.date,
+            self.start_time,
+            self.end_time
+            )
+
+    @property
+    def day(self):
+        return self.date.strftime("%A")
