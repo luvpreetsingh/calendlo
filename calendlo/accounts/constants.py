@@ -5,3 +5,7 @@ ACCOUNT_ROLES = [
     ('DNC', 'DANCE'),
     ('OTH', 'OTHERS'),
 ]
+
+import re
+
+USER_IDENTIFIER_REGEX = re.compile("^\w+$")
