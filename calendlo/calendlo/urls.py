@@ -10,11 +10,12 @@ router = SimpleRouter()
 # import views
 from accounts import views as accounts_views
 from availability import views as avail_views
+from appointments import views as appoint_views
 
 # register app urls with router
 router.register(r'accounts', accounts_views.CalendloUserViewSet, basename='accounts')
 router.register(r'slots', avail_views.AvailabilitySlotViewSet, basename='slots')
-
+router.register(r'appointments', appoint_views.AppointmentViewSet, basename='appointments')
 
 urlpatterns = [
     path('api/v1/', include((router.urls, 'api'))),
