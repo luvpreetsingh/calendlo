@@ -5,7 +5,7 @@ from django.core.validators import RegexValidator, EmailValidator
 
 # Project Level Imports
 from libs.models import TimeStampedModel
-from .constants import ACCOUNT_ROLES, USER_IDENTIFIER_REGEX
+from libs.constants import ACCOUNT_ROLES, USER_IDENTIFIER_REGEX
 from .managers import CalendloUserManager
 
 # Other imports
@@ -29,7 +29,6 @@ class CalendloUser(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
     email = models.EmailField(
         max_length=128,
         unique=True,
-        validators=[EmailValidator]
         )
     role = models.CharField(choices=ACCOUNT_ROLES, max_length=4, default='OTH')
     first_name = models.CharField(max_length=32, null=True)
