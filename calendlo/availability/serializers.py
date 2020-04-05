@@ -44,20 +44,22 @@ class CreateAvailabilitySlotSerializer(serializers.ModelSerializer):
         Here data is coming after validation
         """
         current_date = timezone.now()
-
+        slot_end_time = data['end_time']
+        slot_start_time = data['start_time']
         slot_creation_weekday = self.days_in_week[data["day"]]
-
         user = self.context['request'].user
         bulk_object_list = []
         for week in range(settings.NO_OF_WEEKS_TO_SCHEDULE):
             slot_date = self.next_day_occurence(current_date.date(), slot_creation_weekday)
             slot_date += datetime.timedelta(7 * week)
-            bulk_object_list.append(AvailabilitySlot(
-                user=user,
-                date=slot_date,
-                start_time=data['start_time'],
-                end_time=data['end_time']
-                ))
+            for hour in range(slot_end_time.hour - slot_start_time.hour):
+                start_time = slot_start_time.replace(hour=slot_start_time.hour + hour)
+                bulk_object_list.append(AvailabilitySlot(
+                    user=user,
+                    date=slot_date,
+                    start_time=slot_start_time.replace(hour=slot_start_time.hour + hour),
+                    end_time=start_time.replace(hour=start_time.hour + 1)
+                    ))
 
         AvailabilitySlot.objects.bulk_create(bulk_object_list)
         return bulk_object_list[0]
