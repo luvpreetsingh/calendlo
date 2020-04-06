@@ -1,15 +1,17 @@
 # Django Level Imports
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-from django.core.validators import RegexValidator, EmailValidator
+from django.core.validators import RegexValidator
+from django.utils import timezone
+
+# rest_framework level imports
+from rest_framework.authtoken.models import Token
 
 # Project Level Imports
 from libs.models import TimeStampedModel
 from libs.constants import ACCOUNT_ROLES, USER_IDENTIFIER_REGEX
 from .managers import CalendloUserManager
-
-# Other imports
-from rest_framework.authtoken.models import Token
+from appointments.models import Appointment
 
 
 class CalendloUser(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
@@ -50,3 +52,16 @@ class CalendloUser(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
 
     def __str__(self):
         return "{}".format(self.identifier)
+
+    def get_appointments(self):
+        """
+        This function returns upcoming appointments of a user
+        """
+        current_date = timezone.now().date()
+        filled_slots = self.slots.filter(
+            appointment__isnull=False,
+            date__gte=current_date
+        )
+        appointment_ids = filled_slots.values_list('appointment', flat=True)
+        qs = Appointment.objects.filter(id__in=appointment_ids)
+        return qs

@@ -76,3 +76,10 @@ class AppointmentSerializer(serializers.ModelSerializer):
         """
         appointment = Appointment.objects.create(**data)
         return appointment
+
+
+class AppointmentListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Appointment
+        fields = '__all__'

@@ -6,7 +6,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 # project level imports
-from .serializers import AppointmentSerializer
+from .serializers import AppointmentSerializer, AppointmentListSerializer
 from .models import Appointment
 from libs.constants import (
     INVALID_QUERY_PARAMS,
@@ -22,7 +22,7 @@ class AppointmentViewSet(GenericViewSet):
 
     serializers = {
         "create": AppointmentSerializer,
-        "list": AppointmentSerializer,
+        "list": AppointmentListSerializer,
     }
 
     def get_authenticators(self):
@@ -38,7 +38,7 @@ class AppointmentViewSet(GenericViewSet):
             return []
 
     def get_queryset(self):
-        qs = self.request.user.slots.filter(is_active=True, appointment__isnull=False)
+        qs = self.request.user.get_appointments()
         query_params = dict(self.request.query_params)
         qs, self.calendlo_msg = apply_query_params(
             qs,
