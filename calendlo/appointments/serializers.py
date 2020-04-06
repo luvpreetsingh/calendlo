@@ -1,17 +1,23 @@
 from rest_framework import serializers
+from rest_framework.exceptions import ParseError
 
 from django.utils import timezone
 from django.conf import settings
 
-import datetime
-
 from .models import Appointment
+from availability.models import AvailabilitySlot
 from accounts.models import CalendloUser
+from libs.constants import (
+    ERR_USER_DOES_NOT_EXIST,
+    ERR_INVALID_TIME_DURATION,
+    ERR_INVALID_TIME_INTERVAL,
+    ERR_USER_NOT_AVAILABLE,
+)
 
-class CreateAppointmentSerializer(serializers.ModelSerializer):
+
+class AppointmentSerializer(serializers.ModelSerializer):
     """
     """
-
     appointer = serializers.CharField(max_length=32)
 
     class Meta:
@@ -28,21 +34,32 @@ class CreateAppointmentSerializer(serializers.ModelSerializer):
             )
 
     def validate_appointer(self, appointer):
-        appointer = CalendloUser.objects.get(identifier=appointer)
-        return appointer
+        """
+        This function validates the appointer field
+        """
+        try:
+            return CalendloUser.objects.get(identifier=appointer)
+        except CalendloUser.DoesNotExist:
+            raise ParseError(ERR_USER_DOES_NOT_EXIST)
 
     def validate(self, data):
         duration = data['end_time'].hour - data['start_time'].hour
 
         if duration > 1:
-            return "only for 1 hour error"
+            raise ParseError(ERR_INVALID_TIME_DURATION)
         elif duration < 1:
-            return "end_time cannot be less than start_time"
+            raise ParseError(ERR_INVALID_TIME_INTERVAL)
         else:
-            slot_on_date = data['appointer'].slots.filter(date=data['date'])
-            if slot_on_date.exists():
-                slot = slot_on_date.get(start_time=data['start_time'])
-                data['slot'] = slot
+            try:
+                slot = data['appointer'].slots.get(
+                    date=data['date'],
+                    start_time=data['start_time']
+                )
+                if slot.is_booked:
+                    raise ParseError(ERR_USER_NOT_AVAILABLE)
+                data["slot"] = slot
+            except AvailabilitySlot.DoesNotExist:
+                raise ParseError(ERR_USER_NOT_AVAILABLE)
         return data
 
     def create(self, data):

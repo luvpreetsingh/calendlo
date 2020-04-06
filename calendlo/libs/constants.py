@@ -28,3 +28,26 @@ ERR_INVALID_PASSWORD = {
 
 
 ##### appointments app #####
+
+ERR_INVALID_TIME_DURATION = {
+    "msg": "can not book for more than 1 hour",
+    "error_code": "APP_0001"
+}
+
+ERR_INVALID_TIME_INTERVAL = {
+    "msg": "invalid timings",
+    "error_code": "APP_0002"
+}
+
+ERR_USER_NOT_AVAILABLE = {
+    "msg": "User not free for given timings",
+    "error_code": "APP_0003"
+}
+
+INVALID_QUERY_PARAMS = "Invalid query params"
+
+SUCCESSFUL_APPOINTMENT = {
+    "msg": "Appointment created Successfully!!"
+}
+
+##### availability app #####
