@@ -1,9 +1,11 @@
+# rest_framework level imports
 from rest_framework import serializers
-from rest_framework.exceptions import ParseError
+from rest_framework.exceptions import (
+    NotFound,
+    ValidationError,
+)
 
-from django.utils import timezone
-from django.conf import settings
-
+# project level imports
 from .models import Appointment
 from availability.models import AvailabilitySlot
 from accounts.models import CalendloUser
@@ -19,13 +21,14 @@ class AppointmentSerializer(serializers.ModelSerializer):
     """
     """
     appointer = serializers.CharField(max_length=32)
+    start_time = serializers.TimeField()
+    date = serializers.DateField()
 
     class Meta:
         model = Appointment
         fields = (
             'date',
             'start_time',
-            'end_time',
             'appointer',
             'title',
             'appointee_name',
@@ -35,36 +38,41 @@ class AppointmentSerializer(serializers.ModelSerializer):
 
     def validate_appointer(self, appointer):
         """
-        This function validates the appointer field
+        This function validates the appointer field.
         """
         try:
             return CalendloUser.objects.get(identifier=appointer)
         except CalendloUser.DoesNotExist:
-            raise ParseError(ERR_USER_DOES_NOT_EXIST)
+            raise NotFound(ERR_USER_DOES_NOT_EXIST)
 
     def validate(self, data):
-        duration = data['end_time'].hour - data['start_time'].hour
+        """
+        This function validates all of the serializer data and returns 
+        a dict of the validated data.
+        """
+        try:
+            slot = data['appointer'].slots.get(
+                is_active=True,
+                date=data['date'],
+                start_time=data['start_time']
+            )
+            if slot.is_booked:
+                raise ValidationError(ERR_USER_NOT_AVAILABLE)
+            data["slot"] = slot
+        except AvailabilitySlot.DoesNotExist:
+            raise ValidationError(ERR_USER_NOT_AVAILABLE)
 
-        if duration > 1:
-            raise ParseError(ERR_INVALID_TIME_DURATION)
-        elif duration < 1:
-            raise ParseError(ERR_INVALID_TIME_INTERVAL)
-        else:
-            try:
-                slot = data['appointer'].slots.get(
-                    date=data['date'],
-                    start_time=data['start_time']
-                )
-                if slot.is_booked:
-                    raise ParseError(ERR_USER_NOT_AVAILABLE)
-                data["slot"] = slot
-            except AvailabilitySlot.DoesNotExist:
-                raise ParseError(ERR_USER_NOT_AVAILABLE)
+        # removing fields not related to appointment model
+        data.pop('date')
+        data.pop('start_time')
+        data.pop('appointer')
+
         return data
 
     def create(self, data):
         """
-        Here data is coming after validation
+        This function runs when serializer.save() is called.
+        Here data is coming after validation.
         """
         appointment = Appointment.objects.create(**data)
         return appointment

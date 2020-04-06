@@ -1,14 +1,13 @@
+# django level imports
 from django.db import models
 
 # Project Level Imports
-from libs.models import CalendloBaseModel
+from libs.models import TimeStampedModel
 
-# Create your models here.
 
-class Appointment(CalendloBaseModel):
+class Appointment(TimeStampedModel):
     """
     """
-    appointer = models.ForeignKey('accounts.CalendloUser', on_delete=models.PROTECT, related_name='appointments')
     slot = models.OneToOneField('availability.AvailabilitySlot', on_delete=models.PROTECT)
     title = models.CharField(max_length=128)
     appointee_name = models.CharField(max_length=128)
@@ -19,4 +18,9 @@ class Appointment(CalendloBaseModel):
         db_table = "calendlo_appointment"
 
     def __str__(self):
-        return "{} on {} at {} with {}".format(self.appointer, self.date, self.start_time, self.appointee_name)
+        return "For {} on {} at {} with {}".format(
+            self.slot.user,
+            self.slot.date,
+            self.slot.start_time,
+            self.appointee_name
+        )
