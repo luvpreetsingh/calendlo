@@ -1,7 +1,9 @@
+# django level imports
 from django.contrib import admin
 
+# project level imports
 from .models import AvailabilitySlot
-# Register your models here.
+
 
 @admin.register(AvailabilitySlot)
 class AvailabilitySlotAdmin(admin.ModelAdmin):
@@ -9,6 +11,7 @@ class AvailabilitySlotAdmin(admin.ModelAdmin):
         'user',
         'date',
         'start_time',
-        'end_time',
-        'day'
+        'day',
+        'is_active',
+        'is_booked',
         )

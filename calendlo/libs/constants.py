@@ -51,3 +51,29 @@ SUCCESSFUL_APPOINTMENT = {
 }
 
 ##### availability app #####
+
+SUCCESSFUL_SLOT_CREATION = {
+    "msg": "Slots created Successfully!!"
+}
+
+DAYS_IN_WEEK = {
+    'Monday': 0,
+    'Tuesday': 1,
+    'Wednesday': 2,
+    'Thursday': 3,
+    'Friday': 4,
+    'Saturday': 5,
+    'Sunday': 6,
+}
+
+ERR_INVALID_DAY = {
+    "msg": "invalid day name",
+    "error_code": "AVA_0001"
+}
+
+ERR_USERNAME_NOT_PROVIDED = {
+    "msg": "please provide a username for which you want to see availability",
+    "error_code": "AVA_0002"
+}
+
+HOUR_SET = set([i for i in range(24)])

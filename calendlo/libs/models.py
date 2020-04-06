@@ -2,7 +2,6 @@ from django.db import models
 
 from .validators import validate_absolute_hour
 
-# Create your models here.
 
 class TimeStampedModel(models.Model):
     """
@@ -30,12 +29,7 @@ class CalendloBaseModel(TimeStampedModel, models.Model):
     """
     date = models.DateField()
     start_time = models.TimeField(validators=[validate_absolute_hour])
-    end_time = models.TimeField(validators=[validate_absolute_hour])
 
     class Meta:
         abstract = True
-
-    @property
-    def duration(self):
-        return self.start_time - self.end_time
     
