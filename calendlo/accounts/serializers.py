@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from rest_framework.exceptions import ParseError
+from rest_framework.exceptions import AuthenticationFailed, NotFound
 
 from libs.constants import ERR_USER_DOES_NOT_EXIST, ERR_INVALID_PASSWORD
 from .models import CalendloUser
@@ -30,7 +30,7 @@ class LoginSerializer(serializers.Serializer):
         try:
             user = CalendloUser.objects.get(identifier=data['identifier'])
         except CalendloUser.DoesNotExist:
-            raise ParseError(USER_DOES_NOT_EXIST)
+            raise NotFound(ERR_USER_DOES_NOT_EXIST)
 
         is_password_correct = user.check_password(data['password'])
 
@@ -38,4 +38,4 @@ class LoginSerializer(serializers.Serializer):
             token = user.access_token
             return {'token': token}
         else:
-            raise ParseError(INVALID_PASSWORD)
+            raise AuthenticationFailed(ERR_INVALID_PASSWORD)

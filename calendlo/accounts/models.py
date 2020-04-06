@@ -11,8 +11,6 @@ from .managers import CalendloUserManager
 # Other imports
 from rest_framework.authtoken.models import Token
 
-# Here goes the models.
-
 
 class CalendloUser(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
     """

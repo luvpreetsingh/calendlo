@@ -11,7 +11,7 @@ from rest_framework.exceptions import ParseError
 from .serializers import CreateUserSerializer, LoginSerializer
 from .models import CalendloUser
 from libs.constants import SUCCESSFUL_SIGNUP
-# Create your views here.
+
 
 
 class CalendloUserViewSet(GenericViewSet):
@@ -26,16 +26,12 @@ class CalendloUserViewSet(GenericViewSet):
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid() is False:
-            raise ParseError(dict(serializer.errors))
-        else:
+        if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(SUCCESSFUL_SIGNUP, status=status.HTTP_201_CREATED)
 
     @action(methods=['post'], url_path='login', detail=False)
     def login(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid() is False:
-            raise ParseError(dict(serializer.errors))
-        else:
+        if serializer.is_valid(raise_exception=True):
             return Response(serializer.validated_data)
