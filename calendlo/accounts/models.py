@@ -42,7 +42,7 @@ class CalendloUser(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
     USERNAME_FIELD = 'identifier'
     REQUIRED_FIELDS = ['email']
 
-    class __meta__:
+    class Meta:
         db_table = "calendlo_user"
 
     @property
