@@ -71,7 +71,6 @@ class AvailabilitySlot(CalendloBaseModel):
         """
 
         # generate a list of all hours on which no slot is needed
-
         inactive_slot_set = HOUR_SET - start_time_set
         for date in date_list:
             for time in list(start_time_set):
@@ -114,3 +113,6 @@ class AvailabilitySlot(CalendloBaseModel):
                 except cls.DoesNotExist:
                     # if no slot exists, then do nothing
                     pass
+
+        # P.S - This is bad code.
+        # Due to less time, couldn't optimize the slot creation logic

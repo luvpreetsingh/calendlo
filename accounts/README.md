@@ -1,0 +1,1 @@
+This app manages the accounts related tasks. It exposes the REST APIs for a user to signup and login to the project.

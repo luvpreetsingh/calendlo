@@ -1,0 +1,1 @@
+This app manages the availability of a user. It exposes the REST API for a user to define the timings when he/she is available. It also has an API to list the free slots of a user so that people can see what time he/she is free.

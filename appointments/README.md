@@ -1,0 +1,1 @@
+This app manages the appointments of a user. It exposes the REST API for a person to book an appointment with a calendlo user. It also has an API to list the upcoming appointments of a user.

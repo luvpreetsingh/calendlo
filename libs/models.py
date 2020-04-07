@@ -25,7 +25,6 @@ class CalendloBaseModel(TimeStampedModel, models.Model):
     model where it is inherited.
       - date
       - start_time
-      - end_time
     """
     date = models.DateField()
     start_time = models.TimeField(validators=[validate_absolute_hour])
