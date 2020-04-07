@@ -15,6 +15,7 @@ from libs.constants import (
     ERR_INVALID_TIME_INTERVAL,
     ERR_USER_NOT_AVAILABLE,
 )
+from availability.serializers import ListAvailabilitySlotSerializer
 
 
 class AppointmentSerializer(serializers.ModelSerializer):
@@ -80,6 +81,14 @@ class AppointmentSerializer(serializers.ModelSerializer):
 
 class AppointmentListSerializer(serializers.ModelSerializer):
 
+    slot = ListAvailabilitySlotSerializer()
+
     class Meta:
         model = Appointment
-        fields = '__all__'
+        fields = (
+            'slot',
+            'title',
+            'appointee_email',
+            'appointee_name',
+            'description',
+            )
