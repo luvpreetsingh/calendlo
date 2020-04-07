@@ -1,4 +1,4 @@
-# rest framework leve imports
+# rest framework level imports
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 from rest_framework import status
@@ -52,7 +52,7 @@ class AvailabilitySlotViewSet(GenericViewSet):
         qs = user.slots.filter(
             appointment__isnull=True,
             is_active=True
-        )
+        ).order_by('date', 'start_time')
 
         qs, self.calendlo_msg = apply_query_params(
             qs,
@@ -71,7 +71,13 @@ class AvailabilitySlotViewSet(GenericViewSet):
             return Response(SUCCESSFUL_SLOT_CREATION, status=status.HTTP_201_CREATED)
 
     def list(self, request, *args, **kwargs):
-        slots = self.get_serializer(self.get_queryset(), many=True).data
+        qs = self.get_queryset()
+        page = self.paginate_queryset(qs)
+
+        if page is not None:
+            slots = self.get_serializer(page, many=True).data
+        else:
+            slots = self.get_serializer(qs, many=True).data
         response_dict = {'slots': slots}
         if self.calendlo_msg:
             response_dict['msg'] = self.calendlo_msg
