@@ -7,7 +7,7 @@ DATABASES = {
         'USER': os.getenv("CALENDLO_DATABASE_USER", "USER"),
         'PASSWORD': os.getenv("CALENDLO_DATABASE_PASSWORD", "PASSWORD"),
         'HOST': os.getenv("CALENDLO_DATABASE_HOST", "HOST"),
-        'PORT': int(os.getenv("CALENDLO_DATABASE_PORT", "PORT")),
+        'PORT': int(os.getenv("CALENDLO_DATABASE_PORT", "5432")),
     }
 }
 
