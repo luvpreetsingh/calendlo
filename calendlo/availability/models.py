@@ -15,8 +15,9 @@ class AvailabilitySlot(CalendloBaseModel):
     """
     user = models.ForeignKey('accounts.CalendloUser', on_delete=models.PROTECT, related_name='slots')
 
-    class __meta__:
+    class Meta:
         db_table = "calendlo_availability_slot"
+        unique_together = ['date', 'start_time']
 
     def get_appointment(self):
         """
@@ -58,6 +59,9 @@ class AvailabilitySlot(CalendloBaseModel):
         appointment = self.get_appointment()
         if appointment:
             appointment.delete()
+            return appointment
+        else:
+            return None
 
     @classmethod
     def create_slots(cls, user, date_list, start_time_set):
@@ -67,6 +71,7 @@ class AvailabilitySlot(CalendloBaseModel):
         """
 
         # generate a list of all hours on which no slot is needed
+
         inactive_slot_set = HOUR_SET - start_time_set
         for date in date_list:
             for time in list(start_time_set):
