@@ -15,7 +15,7 @@ NO_OF_WEEKS_TO_SCHEDULE = int(os.getenv("CALENDLO_WEEKS_TO_SCHEDULE", 4))
 
 SECRET_KEY = os.getenv("CALENDLO_SECRET_KEY")
 
-DEBUG = bool(os.getenv("CALENDLO_DEBUG", "0"))
+DEBUG = bool(int(os.getenv("CALENDLO_DEBUG", "0")))
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
