@@ -37,8 +37,11 @@ def apply_query_params(qs, query_params, fields):
         pass
     else:
         for param, value in query_params.items():
+            param = param.split('__')
+            # changing param to support related model lookups
+            param = param[0] + '__' + param[1] if len(param) > 2 else param[0]
             # allowing filtering only on given fields
-            if param.split('__')[0] in fields:
+            if param in fields:
                 try:
                     qs = qs.filter(**{param: value[0]})
                 except Exception:

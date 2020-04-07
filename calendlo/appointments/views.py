@@ -38,12 +38,16 @@ class AppointmentViewSet(GenericViewSet):
             return []
 
     def get_queryset(self):
-        qs = self.request.user.get_appointments()
+        qs = self.request.user.get_appointments().order_by(
+            'slot__date',
+            'slot__start_time'
+        )
         query_params = dict(self.request.query_params)
+        print(query_params)
         qs, self.calendlo_msg = apply_query_params(
             qs,
             query_params,
-            ['date', 'appointee_email']
+            ['slot__date', 'appointee_email']
         )
         return qs
 
@@ -57,7 +61,13 @@ class AppointmentViewSet(GenericViewSet):
             return Response(SUCCESSFUL_APPOINTMENT, status=status.HTTP_201_CREATED)
 
     def list(self, request, *args, **kwargs):
-        appointments = self.get_serializer(self.get_queryset(), many=True).data
+        qs = self.get_queryset()
+        page = self.paginate_queryset(qs)
+
+        if page is not None:
+            appointments = self.get_serializer(page, many=True).data
+        else:
+            appointments = self.get_serializer(qs, many=True).data
         response_dict = {'appointments': appointments}
         if self.calendlo_msg:
             response_dict['message'] = self.calendlo_msg
