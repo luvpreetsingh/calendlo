@@ -56,7 +56,6 @@ class AppointmentViewSet(GenericViewSet):
             serializer.save()
             return Response(SUCCESSFUL_APPOINTMENT, status=status.HTTP_201_CREATED)
 
-    # TODO: Fix list api
     def list(self, request, *args, **kwargs):
         appointments = self.get_serializer(self.get_queryset(), many=True).data
         response_dict = {'appointments': appointments}

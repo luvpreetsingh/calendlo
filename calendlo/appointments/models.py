@@ -14,7 +14,7 @@ class Appointment(TimeStampedModel):
     appointee_email = models.EmailField(max_length=128)
     description = models.TextField()
 
-    class __meta__:
+    class Meta:
         db_table = "calendlo_appointment"
 
     def __str__(self):
