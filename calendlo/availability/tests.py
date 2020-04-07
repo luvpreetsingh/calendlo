@@ -43,9 +43,12 @@ class AvailabilitySlotTestCase(TestCase):
         )
 
     def test_slot(self):
+        self.assertTrue(AvailabilitySlot._meta.db_table == 'calendlo_availability_slot')
+        unique_together = list(map(list, AvailabilitySlot._meta.unique_together))
+        self.assertTrue(unique_together == [['date', 'start_time']])
         self.assertTrue(self.slot_1.is_booked is True)
         self.assertTrue(self.slot_2.is_booked is False)
-        self.assertTrue(self.slot_1, "{} on {} at {}".format(
+        self.assertTrue(self.slot_1.__str__() == "{} on {} at {}".format(
             self.identifier,
             self.date_1,
             self.start_time
@@ -54,7 +57,9 @@ class AvailabilitySlotTestCase(TestCase):
         self.assertTrue(isinstance(self.slot_1.get_appointment(), Appointment))
         self.assertTrue(self.slot_2.get_appointment() is None)
         self.assertTrue(self.slot_1.day in DAYS_IN_WEEK.keys())
-        self.assertTrue(isinstance(self.slot_1.delete_appointment(), Appointment))
+        self.assertTrue(
+            isinstance(self.slot_1.delete_appointment(), Appointment)
+        )
         self.assertTrue(self.slot_2.delete_appointment() is None)
 
         with self.assertRaises(Appointment.DoesNotExist):
