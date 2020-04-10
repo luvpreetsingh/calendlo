@@ -11,13 +11,13 @@ from libs.constants import HOUR_SET
 
 class AvailabilitySlot(CalendloBaseModel):
     """
-    This model class represents the availability of a user    
+    This model class represents the availability of a user
     """
     user = models.ForeignKey('accounts.CalendloUser', on_delete=models.PROTECT, related_name='slots')
 
     class Meta:
         db_table = "calendlo_availability_slot"
-        unique_together = ['date', 'start_time']
+        unique_together = ['date', 'start_time', 'user']
 
     def get_appointment(self):
         """
@@ -33,7 +33,7 @@ class AvailabilitySlot(CalendloBaseModel):
         """
         This function returns if the slot is booked or not
         """
-        return True if self.get_appointment() else False            
+        return True if self.get_appointment() else False
 
     def __str__(self):
         """
